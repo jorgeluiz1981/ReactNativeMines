@@ -93,9 +93,14 @@ const hadExplosion = board => fields(board)
     .filter(field => field.exploded).length > 0
 const pendding = field =>(field.mined && !fields.flagged)
     || (!field.mined && !field.opened)
-const wonGame = board =>field(board).filter(pendding).length === 0
-const showMines = board => field(board).filter(field =>field.mined)
+const wonGame = board =>fields(board).filter(pendding).length === 0
+const showMines = board => fields(board).filter(field =>field.mined)
     .forEach(field => field.opened =true)
+
+const invertFlag = (board, row, column) =>{
+    const field = board[row][column]
+    field.flagged = !field.flagged
+}
 
 //exporta os metodo 
 export {
@@ -103,5 +108,7 @@ export {
     cloneBoard,
     opendField,
     hadExplosion,
-    showMines
+    showMines,
+    wonGame,
+    invertFlag, 
 }

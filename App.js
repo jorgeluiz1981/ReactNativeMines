@@ -1,7 +1,15 @@
 import React ,{Component}from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Alert } from 'react-native';
 import params from './src/params'
-import { createMinedBoard } from './src/functions'
+import { 
+  createMinedBoard,
+  cloneBoard,
+  opendField,
+  hadExplosion,
+  wonGame,
+  showMines,
+  invertFlag,
+} from './src/functions'
 import MineField from './src/components/MineField';
 
 
@@ -23,17 +31,50 @@ export default class App extends Component {
     const cols = params.getColumnsAmount()
     const rows = params.getRowsAmount()
     return{
-      board: createMinedBoard(rows, cols, this.minesAmount())
+      board: createMinedBoard(rows, cols, this.minesAmount()),
+      won: false,
+      lost: false
     }
   }
 
+  onOpenField = (row, column) =>{
+    const board = cloneBoard(this.state.board)
+    opendField(board, row, column)
+    const lost = hadExplosion(board)
+    const won = wonGame(board)
+
+    if(lost){
+      showMines(board)
+      Alert.alert('Você perdeu!', 'Tente novamente ' )
+    }
+
+    if(won){
+      Alert.alert('Parabens', 'Você Venceu!')
+    }
+
+    this.setState({board, lost, won})
+  }
+
+  onSelectField = (row, column) =>{
+    const board = cloneBoard(this.state.board)
+    invertFlag(board, row, column)
+    const won = wonGame(board)
+    
+    if(won){
+      Alert.alert('Parabéns', 'Você Venceu!')
+    }
+
+    this.setState({board, won})
+  }
 
   render() {
     return (
       <View style={styles.container}>       
         
         <View style={styles.board}>
-          <MineField board={this.state.board} /> 
+          <MineField board={this.state.board} 
+            onOpenField = {this.onOpenField}
+            onSelectField = {this.onSelectField}/> 
         </View>        
 
       </View>
