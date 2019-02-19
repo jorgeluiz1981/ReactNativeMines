@@ -81,7 +81,7 @@ export default class App extends Component {
       <View style={styles.container}> 
         <LevelSelection inVisible = { this.state.showLevelSelection}
           onLevelSelected = {this.onLevelSelected}
-          onCancel = {() =>this.setState(showLevelSelection : false)} />      
+          onCancel = {() =>this.setState({showLevelSelection: false})} />      
         <Header flagsLeft = {this.minesAmount() - flagsUsed(this.state.board)}
           onNewGame = {() => this.setState(this.createState())}
           onFlagPress ={() => this.setState({showLevelSelection: true })} />
